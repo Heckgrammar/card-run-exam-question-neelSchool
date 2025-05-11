@@ -1,30 +1,33 @@
-﻿namespace ValidCardRunTask
+namespace ValidCardRunTask
 {
     internal class Program
     {
         static void Main(string[] args)
         {
-            /*
-             * Write a C# program box to check if a player has a valid run of five cards within their 100 cards.
-            When writing your program you should assume:
-                • there is an array called cards that contains the values of the player’s 100 cards
-                • cards[0] will contain the value of the first card and cards[99] will contain the value of the last card
-                • the values in cards are already stored in numerical order
-                • there is a Boolean variable called gameWon that has a value of False.
-            Your program should set gameWon to True if there is a valid run.
-            You should use meaningful variable name(s) in your answer
-            */
-
             int[] cards = dealCards();
             bool gameWon = false;
-            // add your code here
+            HashSet<int> cardSet = new HashSet<int>(cards);
+            foreach (int card in cards)
+            {
+                if (!cardSet.Contains(card - 1))
+                {
+                    int ContCnt = 1;
+                    while (cardSet.Contains(card + ContCnt))
+                    {
+                        ContCnt++;
+                        if (ContCnt >= 5)
+                        {
+                            gameWon = true;
+                            break;
+                        }
+                    }
+                }
+                if (gameWon) break;
+            }
 
-
-            // end of your code
             Console.WriteLine(gameWon);
         }
 
-        // you don't need to change anything below here
         static int[] dealCards()
         {
             int[] gameCards = new int[500];
@@ -44,10 +47,9 @@
             }
             bubbleSort(hand);
 
-
             return hand;
-
         }
+
         static void shuffleCards(int[] gameCards)
         {
             Random rnd = new Random();
@@ -60,10 +62,11 @@
                 gameCards[b] = temp;
             }
         }
+
         static void bubbleSort(int[] hand)
         {
             int n = hand.Length;
-            bool swapped = false;
+            bool swapped;
             do
             {
                 swapped = false;
@@ -80,6 +83,5 @@
                 n--;
             } while (swapped);
         }
-
     }
 }
